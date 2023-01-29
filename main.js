@@ -1,11 +1,21 @@
+//  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
+//  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-analytics.js";
+//  import { getAuth, signInWithEmailAndPassword,  signOut } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+//  import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+
+
+
+
+
+
 let id=(id)=> document.getElementById(id);
 let className=(className)=> document.getElementsByClassName(className);
 
-let  username = id("username"),
-email = id("mail"),
-password = id("password"),
-form = id("form"),
-togglePassword = id('togglePassword');
+let   username = id("username"),
+      email = id("mail"),
+      password = id("password"),
+      form = id("form"),
+      togglePassword = id('togglePassword');
 /*errorMsg = className("error"),
 successIcon = className("success-icon"),
 failureIcon = className("failure-icon");*/
@@ -15,34 +25,15 @@ form.addEventListener("submit",(event)=>{
     event.preventDefault();
     checkInputs();
 
-   /* checkInput(username,0,"field cannot be blank");
-    checkInput(email,1,"field cannot be blank");
-    checkInput(password,2,"field cannot be blank");*/
+  
 });
 
-/*let checkInput=(input,serial,message)=>{
-
-     if (input.value.trim() == ""){
-         errorMsg[serial].innerHTML = message;
-         failureIcon[serial].style.opacity= "1";
-         successIcon[serial].style.opacity ="0";
-         input.style.borderColor= "#e74c3c";
-    }
-
-    else {
-        errorMsg[serial].innerHTML = "";
-        failureIcon[serial].style.opacity= "0";
-        successIcon[serial].style.opacity ="1";
-        input.style.borderColor= "#2ecc71";
-    }
-}*/
 function checkInputs() {
-  // get value from input
-  //trim to remove the whitespace
+ 
   const usernameValue = username.value.trim();
   const emailValue = email.value.trim();
   const passwordValue = password.value.trim();
-  /*const password2Value = password2.value.trim();*/
+  
 
   if (usernameValue === "") {
     //show error
@@ -71,14 +62,6 @@ function checkInputs() {
   else {
     setSuccessFor(password);
   }
-
- /* if (password2Value === "") {
-    setErrorFor(password2, "Oops! confirm password cannot be blank");
-  }else if (passwordValue !== password2Value) {
-    setErrorFor(password2, "Passwords does not match");
-  }else {
-    setSuccessFor(password2);
-  }*/
 }
 
 function setErrorFor(input, message) {
