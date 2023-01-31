@@ -1,11 +1,3 @@
-//  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
-//  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-analytics.js";
-//  import { getAuth, signInWithEmailAndPassword,  signOut } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
-//  import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
-
-
-
-
 
 
 let id=(id)=> document.getElementById(id);
@@ -16,9 +8,6 @@ let   username = id("username"),
       password = id("password"),
       form = id("form"),
       togglePassword = id('togglePassword');
-/*errorMsg = className("error"),
-successIcon = className("success-icon"),
-failureIcon = className("failure-icon");*/
 
 
 form.addEventListener("submit",(event)=>{
