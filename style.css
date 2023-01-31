@@ -30,8 +30,8 @@ form{
     flex-direction: column;
     width: 45%;
     padding: 50px;
-
     box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeIn 1.5s ease-in  3s;
 }
 
 .title{
@@ -79,11 +79,17 @@ label{
 
 
 
-span{
+#sign-In{
 
      color: #f2796e;
      cursor: pointer;
+     transition: all 1s ease-in-out;
 
+}
+
+#sign-In:hover{
+     transform: scale(1.1);
+     letter-spacing: 1.2;
 }
 
 .or{
@@ -107,6 +113,13 @@ span{
    padding: 5px;
    gap: 10px;
    cursor: pointer;
+   transition: all 0.5s ease-in-out;
+}
+
+
+.btn-1:hover,.btn-2:hover{
+    transform: scale(1.1);
+    
 }
 
 .btn-1{
@@ -130,6 +143,7 @@ span{
   min-height: 100vh;
   padding: 20px 20px;
   justify-content: space-around;
+  animation: slideIn 2s ease-in-out 0.5s;
 }
 
 .image{
@@ -217,11 +231,12 @@ button{
     font-weight: 400;
     cursor: pointer;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
+    transition: all 1s ease-in-out;
 }
 
 button:hover{
     opacity:0.8;
+    transform: scale(1.1);
 }
 
 /**
@@ -274,4 +289,15 @@ button:hover{
      .image img{
         width: 330px;
      }
+     }
+
+     @keyframes slideIn{
+        0% {transform: translateY(-50%); opacity: 0}
+        100% {transform: translateY(0%); opacity: 1}
+     }
+
+
+      @keyframes fadeIn{
+        0% { opacity: 0}
+        100% { opacity: 1}
      }
