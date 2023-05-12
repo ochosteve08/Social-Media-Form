@@ -1,178 +1,108 @@
- import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
- import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-analytics.js";
- import { getAuth, signInWithEmailAndPassword,  signOut, GoogleAuthProvider, signInWithPopup,FacebookAuthProvider  } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
- import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
-          
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
+} from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 
- 
+document.addEventListener("DOMContentLoaded", function () {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDUWUJ7wbhD-OVVZPTa-gmCzyU3rvsnRoM",
+    authDomain: "fir-article-78fe6.firebaseapp.com",
+    projectId: "fir-article-78fe6",
+    storageBucket: "fir-article-78fe6.appspot.com",
+    messagingSenderId: "987888543020",
+    appId: "1:987888543020:web:5111803d284aa891953889",
+  };
 
-document.addEventListener("DOMContentLoaded", function(){
-   
-            const firebaseConfig = {
-                apiKey: "AIzaSyDvxLClh-5Fkj_HIxI6CVBwOe6N86908TA",
-                authDomain: "social-media-login-c7fdc.firebaseapp.com",
-                databaseURL: "https://social-media-login-c7fdc-default-rtdb.firebaseio.com",
-                projectId: "social-media-login-c7fdc",
-                storageBucket: "social-media-login-c7fdc.appspot.com",
-                messagingSenderId: "187236862539",
-                appId: "1:187236862539:web:8645436883449bad989bce",
-                measurementId: "G-KKX2EVH7XF"
-            };
-
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app); 
-            const auth = getAuth(app);
-            const user = auth.currentUser;
-            const database = getDatabase(app);
-            const provider = new GoogleAuthProvider(app);
-            const provider2 = new FacebookAuthProvider(app);
-
-
-
-let logOut = document.getElementById('logout');
-let login = document.getElementById('my-form');
-let notLoggedIn = document.getElementById('not-logged-in');
-let LoggedIn = document.getElementById('logged-in');
-let google = document.getElementById("googleBtn");
-let facebook = document.getElementById("facebookBtn");
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+  const db = getFirestore();
 
 
 
-// if (user) {
-//   // User is signed
-//   LoggedIn.style.display = 'block';
-//   notLoggedIn.style.display = 'none';
+  let login = document.getElementById("form");
+  let google = document.getElementById("googleBtn");
 
 
-// } else {
-//   // No user is signed in.
-//   LoggedIn.style.display = 'none';
-//   notLoggedIn.style.display = 'block';
-// }
+  if (user) {
+    // User is signed
+  } else {
+    // No user is signed in.
+  }
 
+  const submitForm = async (event) => {
+    console.log("submit clicked");
+    event.preventDefault();
+    let loginEmail = document.getElementById("mail").value;
+    let loginPassword = document.getElementById("password").value;
 
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        loginEmail,
+        loginPassword
+      );
+      const user = userCredential.user;
+      let login_capture = new Date();
+      updateDoc(doc(db, "users/" + user.uid), {
+        last_login: login_capture,
+      });
+       alert("login successful");
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage);
+      console.log(errorCode);
+    }
+  };
 
-// login.addEventListener("submit",(event)=>{
+  login.addEventListener("submit", submitForm);
 
-// event.preventDefault();       
-// let loginEmail = document.getElementById('email').value;
-// let loginPassword = document.getElementById('password').value;
+  const googleClick = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+      console.log(user);
+      const docRef = doc(db, "users/" + user.uid);
+      const docSnap = await getDoc(docRef, token);
 
-//    signInWithEmailAndPassword(auth, loginEmail, loginPassword)
-//   .then((userCredential) => {
-  
-//     const user = userCredential.user;
-//     let login_capture = new Date();
-//      update(ref(database, 'users/' + user.uid), {
-//     last_login: login_capture
-//   });
-
-//    LoggedIn.style.display = 'block';
-//    notLoggedIn.style.display = 'none';
-//    document.getElementById('display').innerHTML = 'welcome back,'+' '+loginEmail+' ' + 'successfully logged in'
-//     alert('login successful');
-   
-//   })
-//   .catch((error) => {
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//     alert(errorMessage)
-//     console.log(errorMessage);
-//     console.log(errorCode)
-//   });
-
-// });
-
-// logOut.addEventListener('click',()=>{ 
-            
-       
-//         const auth = getAuth();
-//         signOut(auth).then(() => {
-//         // Sign-out successful.
-//         //  LoggedIn.style.display = 'none';
-//         //  notLoggedIn.style.display = 'block';
-//         }).catch((error) => {
-//         // An error happened.
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//         alert(errorMessage)
-   
-//         console.log(errorCode)
-  
-//         });
-
-        
-
-
-//   });
-
-    google.addEventListener('click',(event)=>{
-    console.log('google clicked')
-
-
-    signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    alert('login successful');
-   
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-    alert(errorMessage)
-  });
-
-
+      if (!docSnap.exists()) {
       
+        setDoc(docRef, {
+          name: user.displayName,
+          email: user.email,
+          timestamp: serverTimestamp(),
+        });
+      }
+    } catch (error) {
+      console.log(error.code, error.message);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    }
+  };
 
+  google.addEventListener("click", googleClick);
 
-
-
-
-   });
-
-
-   facebook.addEventListener('click', (event) => {
-    signInWithPopup(auth, provider2)
-  .then((result) => {
-    // The signed-in user info.
-    const user = result.user;
-
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    const credential = FacebookAuthProvider.credentialFromResult(result);
-    const accessToken = credential.accessToken;
-     alert('login successful');
-     
-
-    // ...
-  })
-  .catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = FacebookAuthProvider.credentialFromError(error);
-    alert(errorMessage)
-
-    // ...
-  });
-   })
-
-       
-
-
-    
-})
+  
+});

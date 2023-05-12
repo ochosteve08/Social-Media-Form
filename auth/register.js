@@ -1,95 +1,90 @@
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-analytics.js";
-         
-            import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
-            import { getDatabase, ref, set  } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
-            import { getFirestore } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 
-document.addEventListener("DOMContentLoaded", function(){
-          
-                const firebaseConfig = {
-                apiKey: "AIzaSyDvxLClh-5Fkj_HIxI6CVBwOe6N86908TA",
-                authDomain: "social-media-login-c7fdc.firebaseapp.com",
-                databaseURL: "https://social-media-login-c7fdc-default-rtdb.firebaseio.com",
-                projectId: "social-media-login-c7fdc",
-                storageBucket: "social-media-login-c7fdc.appspot.com",
-                messagingSenderId: "187236862539",
-                appId: "1:187236862539:web:8645436883449bad989bce",
-                measurementId: "G-KKX2EVH7XF"
-            };
-
-
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app); 
-            const auth = getAuth(app);
-            const database = getDatabase(app);
-            const db = getFirestore(app);
+import {
+  getFirestore,
+  doc,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 
 
 
 
+document.addEventListener("DOMContentLoaded", function () {
+   const firebaseConfig = {
+     apiKey: "AIzaSyDUWUJ7wbhD-OVVZPTa-gmCzyU3rvsnRoM",
+     authDomain: "fir-article-78fe6.firebaseapp.com",
+     projectId: "fir-article-78fe6",
+     storageBucket: "fir-article-78fe6.appspot.com",
+     messagingSenderId: "987888543020",
+     appId: "1:987888543020:web:5111803d284aa891953889",
+   };
 
-     let registerBtn = document.getElementById('submit');
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore();
 
+  let registerBtn = document.getElementById("submit");
 
+  let registerForm = async (event) => {
+    event.preventDefault();
+    let userName = document.getElementById("username").value;
+    let email = document.getElementById("mail").value;
+    let password = document.getElementById("password").value;
 
+    // Check if the username and password meet your criteria
+    if (!isValidUsername(userName)) {
+      alert("Invalid username. Please use only letters and numbers.");
+      return;
+    }
 
-    registerBtn.addEventListener('click',()=>{
+    if (!isValidPassword(password)) {
+      alert("Invalid password. Please use at least 8 characters.");
+      return;
+    }
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+        alert("login successful");
+      let login_capture = new Date();
+      let personalData = {
+        name: userName,
+        email: email,
+        password: password,
+        timeStamp: login_capture,
+      };
 
+      console.log("User created successfully");
+      // Adding user data to Firestore
 
-        let userName = document.getElementById("username").value;
-        let email = document.getElementById("mail").value;
-        let password =document.getElementById("password").value;
-      
-        
-        
+      await setDoc(doc(db, "users/" + user.uid), personalData);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage);
+      console.log(errorCode);
+    }
+  };
+  registerBtn.addEventListener("click", registerForm);
 
-
-   createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-     const user = userCredential.user;
-
-        set(ref(database, 'users/' + user.uid), {
-        username : userName,
-        email: email        
-        });
-        alert('user created')
-
-     
-      
-    })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    alert(errorMessage)
-    console.log(errorCode)
   
-  });
 
-   });
-})
+  // Function to check if the username is valid
+  function isValidUsername(username) {
+    const regex = /^[a-zA-Z0-9]+$/;
+    return regex.test(username);
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-   
- 
- 
- 
+  // Function to check if the password is valid
+  function isValidPassword(password) {
+    return password.length >= 8;
+  }
+});
